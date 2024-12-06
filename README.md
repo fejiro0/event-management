@@ -1,34 +1,243 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Campus Event Management Hub
 
-## Getting Started
+## Project Overview
 
-First, run the development server:
+The **Campus Event Management Hub** is a web application where students and staff can view, register, and manage campus events such as workshops, seminars, and club activities. The system allows users to:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+- Register and log in to create personal event preferences.
+- View upcoming events, including their details like name, date, time, location, and available seats.
+- RSVP for events, which updates the number of available seats and saves the events to their profile.
+- Admin users can create events, specifying event details, capacity, and more.
+- A calendar view that displays events based on the selected date, with filters based on event preferences.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **User Registration & Event Preferences**: Students and staff can register and set preferences for types of events.
+- **Event Listings & RSVP**: Users can browse events, check available seats, and RSVP to participate.
+- **Event Creation (Admin Only)**: Only admins can create events, specifying the event name, description, location, and capacity.
+- **Event Calendar View**: A calendar view allows users to see events by date, and filter events based on preferences.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Tech Stack
 
-## Learn More
+- **Frontend**: React.js
+- **Backend**: Node.js with Express.js
+- **Database**: MongoDB
+- **CSS Framework**: Tailwind CSS
 
-To learn more about Next.js, take a look at the following resources:
+## Installation Instructions
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Prerequisites
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- **Node.js** and **npm** must be installed on your machine.
+- **MongoDB** (local or cloud-based like MongoDB Atlas) for storing user data and events.
+- **Git** for version control.
 
-## Deploy on Vercel
+### Backend Setup
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. **Clone the repository**:
+   ```bash
+   git clone <repository-link>
+   cd backend
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+2. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+
+3. **Create an `.env` file in the root directory** to configure environment variables. Here's an example of the required `.env` file:
+   ```env
+   MONGO_URI=your_mongo_connection_string
+   JWT_SECRET=your_jwt_secret_key
+   PORT=5000
+   ```
+
+4. **Start the backend server**:
+   ```bash
+   npm start
+   ```
+   The backend server should now be running at `http://localhost:5000`.
+
+### Frontend Setup
+
+1. **Clone the repository**:
+   ```bash
+   git clone <repository-link>
+   cd frontend
+   ```
+
+2. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+
+3. **Run the frontend application**:
+   ```bash
+   npm start
+   ```
+   The frontend application should now be running at `http://localhost:3000`.
+
+### Frontend and Backend Integration
+
+- Ensure the **API endpoints** on the backend are being correctly consumed by the frontend application.
+- The frontend makes **HTTP requests** to the backend API for user registration, event listing, RSVP, and event creation.
+- The frontend can be configured to use **Axios** or **Fetch API** to make requests to the backend endpoints.
+
+---
+
+## Features
+
+### 1. **User Registration & Event Preferences**
+
+- **Registration**: Users can sign up by providing their name, email, password, and event preferences (e.g., workshops, seminars).
+- **Login**: Users can log in using their email and password, after which they will receive a JWT token.
+- **Event Preferences**: Users can set their event preferences, which will be stored in their profile for personalized event recommendations.
+
+**Backend API Endpoints**:
+- `POST /api/auth/register`: Register a new user.
+- `POST /api/auth/login`: Login a user.
+
+**Frontend**: Users can use a registration form that posts data to the backend and then use a login form to authenticate and retrieve a JWT token for further requests.
+
+### 2. **Event Listings & RSVP**
+
+- **Event Listings**: Users can view a list of all upcoming events with details like the name, date, time, location, and available seats.
+- **RSVP**: Users can RSVP to an event, and the available seats for that event will be updated. The event is saved to the user's profile.
+
+**Backend API Endpoints**:
+- `GET /api/events`: Get all upcoming events.
+- `POST /api/events/rsvp/:eventId`: RSVP to an event and update available seats.
+
+**Frontend**: Events are displayed in a list format. Users can click on an event to RSVP, and the available seats will be updated in real-time.
+
+### 3. **Event Creation (Admin Only)**
+
+- **Admin Role**: Only admins can create new events. The event will include a name, description, date, location, and capacity.
+- **Unique Event ID**: Each event will have a unique ID, which is automatically generated by the database.
+  
+**Backend API Endpoints**:
+- `POST /api/admin/events`: Admin can create a new event.
+
+**Frontend**: Admins can access a form that allows them to create new events. The form will send data to the backend to store the new event in the database.
+
+### 4. **Event Calendar View**
+
+- **Calendar View**: Users can view a calendar showing upcoming events by date.
+- **Filters**: Users can filter the events based on their event preferences (e.g., only show workshops).
+  
+**Backend API Endpoints**:
+- `GET /api/events`: Retrieve events for calendar display.
+
+**Frontend**: The calendar view is created using a calendar library such as **FullCalendar.js** or custom React components. Events are fetched from the backend and displayed in the calendar format.
+
+---
+
+## Feature Checklist
+
+- [x] User Registration & Event Preferences
+- [x] Event Listings & RSVP
+- [x] Event Creation (Admin Only)
+- [x] Event Calendar View
+
+---
+
+## API Documentation
+
+The project includes the following API endpoints:
+
+### **User Authentication**
+
+1. **POST /api/auth/register**: Register a new user
+   - **Request Body**:
+     ```json
+     {
+       "name": "John Doe",
+       "email": "john.doe@example.com",
+       "password": "password123",
+       "eventPreferences": ["workshops", "seminars"]
+     }
+     ```
+   - **Response**: 
+     ```json
+     { "message": "User registered successfully" }
+     ```
+
+2. **POST /api/auth/login**: Login a user
+   - **Request Body**:
+     ```json
+     {
+       "email": "john.doe@example.com",
+       "password": "password123"
+     }
+     ```
+   - **Response**:
+     ```json
+     {
+       "token": "jwt_token_here"
+     }
+     ```
+
+### **Event Management**
+
+1. **GET /api/events**: Retrieve all events
+   - **Response**:
+     ```json
+     [
+       {
+         "id": "123",
+         "name": "Workshop on AI",
+         "date": "2024-12-15T10:00:00Z",
+         "location": "Campus Hall A",
+         "availableSeats": 50
+       },
+       {
+         "id": "124",
+         "name": "Seminar on Web Development",
+         "date": "2024-12-18T14:00:00Z",
+         "location": "Online",
+         "availableSeats": 100
+       }
+     ]
+     ```
+
+2. **POST /api/events/rsvp/:eventId**: RSVP to an event
+   - **Request Body**: 
+     ```json
+     {
+       "userId": "user_id_here"
+     }
+     ```
+   - **Response**:
+     ```json
+     { "message": "RSVP successful" }
+     ```
+
+### **Admin Event Creation**
+
+1. **POST /api/admin/events**: Create a new event (Admin Only)
+   - **Request Body**:
+     ```json
+     {
+       "name": "New Event",
+       "description": "Description of the event",
+       "date": "2024-12-20T09:00:00Z",
+       "location": "Campus Hall B",
+       "capacity": 200
+     }
+     ```
+   - **Response**:
+     ```json
+     { "message": "Event created successfully" }
+     ```
+
+---
+
+## Deployment Link
+
+The project is deployed at [**your-deployment-link**](https://your-deployment-link.com).
+
+---
+a
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
